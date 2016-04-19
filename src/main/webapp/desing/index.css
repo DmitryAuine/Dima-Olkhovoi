@@ -1,0 +1,24 @@
+.tip {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+.board {
+  border: solid 2px;
+  width: 564px;
+  margin: auto;
+  }
+
+.board .col {
+  background: white;
+  height: 70px;
+  width: 70px;
+  float: left;
+  text-align: center;
+  font-size: 46px;
+}
+
+.board .b-row:nth-child(odd) .col:nth-child(even),
+.board .b-row:nth-child(even)  .col:nth-child(odd) {
+	background: black;
+}
