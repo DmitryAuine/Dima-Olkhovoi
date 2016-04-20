@@ -2,5 +2,9 @@ export default {
   app: {
     loaderVisibility: false,
   },
-  data: {},
+  data: {
+    selectedSquare: null,
+    positionToPieces: [],
+    moves: [],
+  },
 };

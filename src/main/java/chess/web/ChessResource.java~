@@ -68,7 +68,6 @@ public class ChessResource {
     public List<MoveBean> getMovesList(@Context Request request, @Context Response response) {
         GameState gameState = getGameState(request);
         addCustomHeaders(gameState, response);
-  	response.addHeader("Access-Control-Allow-Origin", "*");
         return getCurrentMoves(gameState);
     }
 

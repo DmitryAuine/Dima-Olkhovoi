@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import Top from '../../containers/Top';
 import Board from '../../containers/Board';
 import CSSModules from 'react-css-modules';
 import styles from './styles/index.local.css';
@@ -8,7 +8,8 @@ import styles from './styles/index.local.css';
 export default class App extends Component {
   render() {
     return (
-      <div styleName="red">
+      <div className="container">
+        <Top />
         <Board />
       </div>
     );

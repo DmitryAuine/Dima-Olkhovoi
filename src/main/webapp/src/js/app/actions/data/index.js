@@ -1,5 +1,6 @@
 import request from 'superagent';
 import dataConstants from '../../constants/data';
+import { fetchMovesIfNeeded } from './moves';
 import { showLoader, hideLoader } from '../app';
 import { apiBaseURL } from '../../config';
 
@@ -17,14 +18,14 @@ export const fetchDataFailure = () => ({
   // message: 'data.fetch.error',
 });
 
-const fetchData = () => dispatch => {
+const fetchData = (newGame) => dispatch => {
   dispatch(fetchDataRequest());
   dispatch(showLoader());
+  newGame && dispatch(prepareNewGame());
 
-  return request
-    .get(`${apiBaseURL}/chess`)
-    .set('Accept', 'application/json')
-    .set('Content-Type', 'application/json')
+  return request[newGame ? 'post' : 'get'](`${apiBaseURL}/chess`)
+    // .set('Accept', 'application/json')
+    // .set('Content-Type', 'application/json')
     .end((err, res) => {
       dispatch(hideLoader());
       if (err) {
@@ -36,8 +37,10 @@ const fetchData = () => dispatch => {
 };
 
 const shouldFetchData = (state) => {
-  const data = state.getIn(['data']);
-  if (!data.size) {
+  const data = state.get('data');
+  const positionToPieces = data.get('positionToPieces');
+
+  if (!positionToPieces.size) {
     return true;
   }
 
@@ -55,3 +58,22 @@ export const fetchDataIfNeeded = () => (dispatch, getState) => {
 
   return Promise.resolve();
 };
+
+
+export const setSelectedSquare = (data) => ({
+  type: dataConstants.SET_SELECTED_SQUARE,
+  data,
+});
+
+export const selectSquare = (data) => (dispatch) => {
+  dispatch(setSelectedSquare(data));
+  dispatch(fetchMovesIfNeeded());
+
+  return Promise.resolve();
+};
+
+export const startNewGame = () => (dispatch) => dispatch(fetchData(true));
+
+export const prepareNewGame = () => ({
+  type: dataConstants.PREPARE_NEW_GAME,
+});

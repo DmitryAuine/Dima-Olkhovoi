@@ -1,0 +1,14 @@
+.board {
+  border: solid 2px;
+  width: 564px;
+  margin: auto;
+}
+
+.col {
+  background: white;
+}
+
+.board .row:nth-child(odd) div:nth-child(even),
+.board .row:nth-child(even) div:nth-child(odd) {
+	background: black;
+}
