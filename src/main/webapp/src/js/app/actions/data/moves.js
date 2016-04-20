@@ -12,7 +12,21 @@ export const fetchDataSuccess = (data) => ({
   data,
 });
 
+export const moveRequest = () => ({
+  type: dataConstants.MOVE_REQUEST,
+});
+
+export const moveSuccess = (data) => ({
+  type: dataConstants.MOVE_SUCCESS,
+  data,
+});
+
 export const fetchDataFailure = () => ({
+  // type: dataConstants.SHOW_ERROR,
+  // message: 'data.fetch.error',
+});
+
+export const moveFailure = () => ({
   // type: dataConstants.SHOW_ERROR,
   // message: 'data.fetch.error',
 });
@@ -30,6 +44,24 @@ const fetchData = () => dispatch => {
         dispatch(fetchDataFailure());
       } else {
         dispatch(fetchDataSuccess(res.body));
+      }
+    });
+};
+
+const move = (from, to) => dispatch => {
+  dispatch(moveRequest());
+  dispatch(showLoader());
+
+  return request.post(`${apiBaseURL}/chess/moves`)
+    // .set('Accept', 'application/json')
+    // .set('Content-Type', 'application/json')
+    .send({ origin: from, destination: to })
+    .end((err, res) => {
+      dispatch(hideLoader());
+      if (err) {
+        dispatch(moveFailure());
+      } else {
+        dispatch(moveSuccess(res.body));
       }
     });
 };
@@ -55,3 +87,5 @@ export const fetchMovesIfNeeded = () => (dispatch, getState) => {
 
   return Promise.resolve();
 };
+
+export const doMove = (from, to) => (dispatch) => dispatch(move(from, to));

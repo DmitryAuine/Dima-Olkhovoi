@@ -2,9 +2,17 @@ import dataConstants from '../../constants/data';
 
 export default (state, { type, data }) => {
   switch (type) {
+    case dataConstants.MOVE_REQUEST:
     case dataConstants.FETCH_DATA_REQUEST:
     case dataConstants.FETCH_DATA_MOVES_REQUEST:
       return state.set('isFetching', true);
+    case dataConstants.MOVE_SUCCESS:
+      return state.merge({
+        isFetching: false,
+        selectSquare: null,
+        ...data,
+        moves: [],
+      });
     case dataConstants.FETCH_DATA_SUCCESS:
       return state.merge({
         isFetching: false,

@@ -7,6 +7,10 @@
   cursor: pointer;
 }
 
-.square.active{
-  box-shadow: 0px 0px 3px 3px blue;
+.square.active {
+  box-shadow: 0px 0px 3px 3px blue inset;
+}
+
+.square.can-move {
+  box-shadow: 0px 0px 3px 3px green inset;
 }

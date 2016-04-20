@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchDataIfNeeded, selectSquare } from '../../actions/data';
+import { selectSquare } from '../../actions/data/';
+import { doMove } from '../../actions/data/moves';
+import { fetchDataIfNeeded } from '../../actions/data/data';
 import Square from '../../components/Square';
 import CSSModules from 'react-css-modules';
 import styles from './styles/index.local.css';
@@ -23,39 +25,54 @@ class Board extends Component {
   }
 
   render() {
-    const { data, selectSquare } = this.props;
+    const { data, selectSquare, doMove } = this.props;
     const positionToPieces = data.get('positionToPieces');
     const currentPlayer = data.get('currentPlayer');
     const selectedSquare = data.get('selectedSquare');
+    const moves = data.get('moves');
+    const canMoves = moves
+      .filter(square => (square.get('origin') === selectedSquare))
+      .map(square => (square.get('destination'))).toJS();
 
     return(
       <div styleName="board">
         {
+
           Board.boardMap.map((col, key) => {
             return (
               <div styleName="row" key={ key }>
                 {
                   col.map((item, key) => {
-                    let square = positionToPieces.get(item);
+                    const square = positionToPieces.get(item);
+                    const canMove = canMoves.indexOf(item) !== -1;
 
                     if(square){
-                      let owner = square.get('owner');
+                      const owner = square.get('owner');
 
                       return <Square
                         key={ key }
                         type={ square.get('type') }
                         owner={ owner }
                         selected={ selectedSquare === item }
+                        canMove={ canMove }
                         onClick={() => {
+                          if(canMove){
+                            return doMove(selectedSquare, item);
+                          }
+
                           if(owner === currentPlayer){
-                            selectSquare(item);
+                            return selectSquare(item);
                           }else{
                             alert('It\'s not your piece');
                           }
                         }}
                       />
                     }else{
-                      return <Square key={ key } />
+                      return <Square key={ key } onClick={() => {
+                        if(canMove){
+                          return doMove(selectedSquare, item);
+                        }
+                      }} canMove={ canMove } />
                     }
                   })
                 }
@@ -78,4 +95,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   fetchDataIfNeeded,
   selectSquare,
+  doMove,
 })(Board);

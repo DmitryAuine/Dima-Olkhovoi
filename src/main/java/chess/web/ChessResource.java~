@@ -68,6 +68,17 @@ public class ChessResource {
     public List<MoveBean> getMovesList(@Context Request request, @Context Response response) {
         GameState gameState = getGameState(request);
         addCustomHeaders(gameState, response);
+  	response.addHeader("Access-Control-Allow-Origin", "*");
+        return getCurrentMoves(gameState);
+    }
+
+@Path("moves")
+    @OPTIONS
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<MoveBean> justForCORS(@Context Request request, @Context Response response) {
+        GameState gameState = getGameState(request);
+        addCustomHeaders(gameState, response);
+  	response.addHeader("Access-Control-Allow-Origin", "*");
         return getCurrentMoves(gameState);
     }
 
@@ -77,7 +88,7 @@ public class ChessResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public GameStateBean postMove(@Context Request request, @Context Response response, MoveBean move) {
         GameState currentState = getGameState(request);
-
+	response.addHeader("Access-Control-Allow-Origin", "*");
         try {
             currentState.makeMove(move.toString());
             return getGameStateBean(request, response);

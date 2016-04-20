@@ -10,11 +10,11 @@ import styles from './styles/index.local.css';
 export default class Square extends Component {
   static pieceMapper = {
     white: {
-      n: '&#9812',
+      k: '&#9812',
       q: '&#9813',
       r: '&#9814',
       b: '&#9815',
-      k: '&#9816',
+      n: '&#9816',
 	    p: '&#9817',
     },
     black: {
@@ -32,13 +32,15 @@ export default class Square extends Component {
       type: piece,
       owner: color,
       selected,
-      onClick
+      onClick,
+      canMove
     } = this.props;
-
     return (
       <div
         onClick={onClick}
-        styleName={ selected ? 'square active' : 'square' }
+        styleName={
+          `square ${selected ? 'active' : '' } ${canMove ? 'can-move' : ''}`
+        }
         dangerouslySetInnerHTML={
             {
               __html: (piece) ? Square.pieceMapper[color.toLowerCase()][piece] : ''

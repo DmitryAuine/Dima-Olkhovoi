@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { startNewGame } from '../../actions/data';
+import { startNewGame } from '../../actions/data/data';
 import Board from '../../containers/Board';
 import CSSModules from 'react-css-modules';
 import styles from './styles/index.local.css';
