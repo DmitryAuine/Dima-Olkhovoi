@@ -8,8 +8,8 @@ import styles from './styles/index.local.css';
 @CSSModules(styles)
 class Top extends Component {
   render() {
-    const { startNewGame, player } = this.props;
-    console.log(this.props)
+    const { startNewGame, player, inCheck, isGameOver } = this.props;
+    isGameOver && alert('Game over');
 
     return (
       <div>
@@ -30,7 +30,9 @@ class Top extends Component {
           </div>
         </nav>
         <div styleName="tip">
-          <p>{player}, it's your turn</p>
+          <p>
+            {player}, it's your turn {inCheck ? 'You are in check' : ''}
+          </p>
         </div>
       </div>
     );
@@ -39,7 +41,9 @@ class Top extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    player: state.getIn(['data', 'currentPlayer'])
+    player: state.getIn(['data', 'currentPlayer']),
+    inCheck: state.getIn(['data', 'inCheck']),
+    isGameOver: state.getIn(['data', 'gameOver']),
   }
 }
 

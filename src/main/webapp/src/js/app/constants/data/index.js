@@ -9,4 +9,5 @@ export default keyMirror({
   SET_SELECTED_SQUARE: null,
   MOVE_REQUEST: null,
   MOVE_SUCCESS: null,
+  PREPARE_NEW_GAME: null,
 });

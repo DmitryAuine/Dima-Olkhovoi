@@ -31,8 +31,9 @@ public class ChessResource {
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
     public GameStateBean getGame(@Context Request request, @Context Response response) {
-	response.addHeader("Access-Control-Allow-Origin", "*");
-        return getGameStateBean(request, response);
+	response.addHeader("Access-Control-Allow-Origin", "http://localhost:3010");
+	response.addHeader("Access-Control-Allow-Credentials", "true");        
+	return getGameStateBean(request, response);
     }
 
     @PUT
@@ -58,7 +59,8 @@ public class ChessResource {
         GameState gameState = new GameState();
         gameState.reset();
         storeGameState(request, gameState);
-	response.addHeader("Access-Control-Allow-Origin", "*");
+	response.addHeader("Access-Control-Allow-Origin", "http://localhost:3010");
+response.addHeader("Access-Control-Allow-Credentials", "true");  
         return getGameStateBean(request, response);
     }
 
@@ -68,7 +70,7 @@ public class ChessResource {
     public List<MoveBean> getMovesList(@Context Request request, @Context Response response) {
         GameState gameState = getGameState(request);
         addCustomHeaders(gameState, response);
-  	response.addHeader("Access-Control-Allow-Origin", "*");
+  	response.addHeader("Access-Control-Allow-Origin", "http://localhost:3010");
         return getCurrentMoves(gameState);
     }
 
@@ -78,7 +80,9 @@ public class ChessResource {
     public List<MoveBean> justForCORS(@Context Request request, @Context Response response) {
         GameState gameState = getGameState(request);
         addCustomHeaders(gameState, response);
-  	response.addHeader("Access-Control-Allow-Origin", "*");
+  	response.addHeader("Access-Control-Allow-Origin", "http://localhost:3010");
+ 	response.addHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE");
+  	response.addHeader("Access-Control-Allow-Headers", "Content-Type,Accept");
         return getCurrentMoves(gameState);
     }
 
@@ -88,7 +92,7 @@ public class ChessResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public GameStateBean postMove(@Context Request request, @Context Response response, MoveBean move) {
         GameState currentState = getGameState(request);
-	response.addHeader("Access-Control-Allow-Origin", "*");
+	response.addHeader("Access-Control-Allow-Origin", "http://localhost:3010");
         try {
             currentState.makeMove(move.toString());
             return getGameStateBean(request, response);

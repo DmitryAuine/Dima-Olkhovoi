@@ -9,7 +9,7 @@ export default (state, { type, data }) => {
     case dataConstants.MOVE_SUCCESS:
       return state.merge({
         isFetching: false,
-        selectSquare: null,
+        selectedSquare: null,
         ...data,
         moves: [],
       });
@@ -25,7 +25,7 @@ export default (state, { type, data }) => {
       });
     case dataConstants.PREPARE_NEW_GAME:
       return state.merge({
-        selectSquare: null,
+        selectedSquare: null,
         moves: [],
       });
     case dataConstants.SET_SELECTED_SQUARE:

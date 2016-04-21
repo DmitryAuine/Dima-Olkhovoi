@@ -38,6 +38,7 @@ const fetchData = () => dispatch => {
   return request.get(`${apiBaseURL}/chess/moves`)
     // .set('Accept', 'application/json')
     // .set('Content-Type', 'application/json')
+    .withCredentials()
     .end((err, res) => {
       dispatch(hideLoader());
       if (err) {
@@ -56,6 +57,7 @@ const move = (from, to) => dispatch => {
     // .set('Accept', 'application/json')
     // .set('Content-Type', 'application/json')
     .send({ origin: from, destination: to })
+    .withCredentials()
     .end((err, res) => {
       dispatch(hideLoader());
       if (err) {

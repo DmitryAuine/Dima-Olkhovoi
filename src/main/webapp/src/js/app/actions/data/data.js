@@ -25,6 +25,7 @@ const fetchData = (newGame) => dispatch => {
   return request[newGame ? 'post' : 'get'](`${apiBaseURL}/chess`)
     // .set('Accept', 'application/json')
     // .set('Content-Type', 'application/json')
+    .withCredentials()
     .end((err, res) => {
       dispatch(hideLoader());
       if (err) {
