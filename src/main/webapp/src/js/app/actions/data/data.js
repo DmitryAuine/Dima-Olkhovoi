@@ -1,6 +1,6 @@
-import request from 'superagent';
 import dataConstants from '../../constants/data';
 import { showLoader, hideLoader } from '../app';
+import fetch from 'isomorphic-fetch';
 import { apiBaseURL } from '../../config';
 
 export const fetchDataRequest = () => ({
@@ -22,18 +22,19 @@ const fetchData = (newGame) => dispatch => {
   dispatch(showLoader());
   newGame && dispatch(prepareNewGame());
 
-  return request[newGame ? 'post' : 'get'](`${apiBaseURL}/chess`)
-    // .set('Accept', 'application/json')
-    // .set('Content-Type', 'application/json')
-    .withCredentials()
-    .end((err, res) => {
-      dispatch(hideLoader());
-      if (err) {
-        dispatch(fetchDataFailure());
-      } else {
-        dispatch(fetchDataSuccess(res.body));
+  return fetch(`${apiBaseURL}/chess`, {
+    method: newGame ? 'POST' : 'GET',
+    credentials: 'include',
+  }).then(
+      (response) => {
+        dispatch(hideLoader());
+        return response.json();
       }
-    });
+    ).then(
+      (json) => dispatch(fetchDataSuccess(json))
+    ).catch(
+      () => dispatch(fetchDataFailure())
+    );
 };
 
 const shouldFetchData = (state) => {

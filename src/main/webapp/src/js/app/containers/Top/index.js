@@ -7,9 +7,12 @@ import styles from './styles/index.local.css';
 
 @CSSModules(styles)
 class Top extends Component {
+  componentWillReceiveProps(props){
+    this.props.isGameOver && alert('Game over');
+  }
+
   render() {
-    const { startNewGame, player, inCheck, isGameOver } = this.props;
-    isGameOver && alert('Game over');
+    const { startNewGame, player, inCheck } = this.props;
 
     return (
       <div>

@@ -1,6 +1,6 @@
-import request from 'superagent';
 import dataConstants from '../../constants/data';
 import { showLoader, hideLoader } from '../app';
+import fetch from 'isomorphic-fetch';
 import { apiBaseURL } from '../../config';
 
 export const fetchDataRequest = () => ({
@@ -31,41 +31,49 @@ export const moveFailure = () => ({
   // message: 'data.fetch.error',
 });
 
-const fetchData = () => dispatch => {
+export const fetchData = () => dispatch => {
   dispatch(fetchDataRequest());
   dispatch(showLoader());
 
-  return request.get(`${apiBaseURL}/chess/moves`)
-    // .set('Accept', 'application/json')
-    // .set('Content-Type', 'application/json')
-    .withCredentials()
-    .end((err, res) => {
-      dispatch(hideLoader());
-      if (err) {
-        dispatch(fetchDataFailure());
-      } else {
-        dispatch(fetchDataSuccess(res.body));
+  return fetch(`${apiBaseURL}/chess/moves`, {
+    credentials: 'include',
+  }).then(
+      (response) => {
+        dispatch(hideLoader());
+        return response.json();
       }
-    });
+    ).then(
+      (json) => dispatch(fetchDataSuccess(json))
+    ).catch(
+      () => dispatch(fetchDataFailure())
+    );
 };
 
 const move = (from, to) => dispatch => {
   dispatch(moveRequest());
   dispatch(showLoader());
 
-  return request.post(`${apiBaseURL}/chess/moves`)
-    // .set('Accept', 'application/json')
-    // .set('Content-Type', 'application/json')
-    .send({ origin: from, destination: to })
-    .withCredentials()
-    .end((err, res) => {
-      dispatch(hideLoader());
-      if (err) {
-        dispatch(moveFailure());
-      } else {
-        dispatch(moveSuccess(res.body));
+  return fetch(`${apiBaseURL}/chess/moves`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      origin: from,
+      destination: to,
+    }),
+  }).then(
+      (response) => {
+        dispatch(hideLoader());
+        return response.json();
       }
-    });
+    ).then(
+      (json) => dispatch(moveSuccess(json))
+    ).catch(
+      () => dispatch(moveFailure())
+    );
 };
 
 const shouldFetchMoves = (state) => {
